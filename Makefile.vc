@@ -18,7 +18,7 @@ OUT_LIB_NAME = fuzzy_a.lib
 all: fuzzy_a
 
 fuzzy_a:
-	$(CC) $(CFLAGS) /c fuzzy.c edit_dist.c "find-file-size.c"
+	$(CC) $(CFLAGS) /Fdfuzzy_a.pdb /c fuzzy.c edit_dist.c "find-file-size.c"
 	$(AR) /OUT:$(OUT_LIB_NAME) fuzzy.obj edit_dist.obj "find-file-size.obj"
 
 clean:
