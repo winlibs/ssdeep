@@ -15,12 +15,6 @@ CFLAGS = $(CFLAGS) /D NDebug /D NDEBUG /MP /MD /Ox /GF /Zi
 OUT_LIB_NAME = fuzzy_a.lib
 !endif
 
-!if "$(MACHINE)" == "x86"
-CFLAGS = $(CFLAGS) /D fseeko=fseek /D ftello=ftell /D fuzzy_off_t=__int32
-!else
-CFLAGS = $(CFLAGS) /D fseeko=_fseeki64 /D ftello=_ftelli64 /D fuzzy_off_t=__int64
-!endif
-
 all: fuzzy_a
 
 fuzzy_a:

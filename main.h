@@ -30,9 +30,35 @@
 #include <errno.h>
 #include <limits.h>
 #include <sys/stat.h>
+#ifndef _MSC_VER
 #include <unistd.h>
+#endif
 #include <ctype.h>
+#if !defined(_MSC_VER) || _MSC_VER >= 1900
 #include <inttypes.h>
+#endif
+
+#ifdef _MSC_VER
+#if _MSC_VER < 1900
+#define snprintf _snprintf
+typedef unsigned __int32 uint32_t;
+typedef unsigned __int64 uint_least64_t;
+#endif
+#ifdef _M_X64
+#define fseeko _fseeki64
+#define ftello _ftelli64
+typedef __int64 fuzzy_off_t;
+#else
+#define fseeko fseek
+#define ftello ftell
+typedef __int32 fuzzy_off_t;
+#endif
+#else
+typedef off_t fuzzy_off_t;
+#endif
+
+
+
 
 #ifdef HAVE_DIRENT_H
 # include <dirent.h>

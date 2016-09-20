@@ -13,9 +13,9 @@
 #if defined (__LINUX__)
 
 
-off_t find_file_size(FILE *f) 
+fuzzy_off_t find_file_size(FILE *f) 
 {
-  off_t num_sectors = 0, sector_size = 0;
+  fuzzy_off_t num_sectors = 0, sector_size = 0;
   int fd = fileno(f);
   struct stat sb;
 
@@ -61,10 +61,10 @@ off_t find_file_size(FILE *f)
 
 #elif defined (__APPLE__)
 
-off_t find_file_size(FILE *f) {
+fuzzy_off_t find_file_size(FILE *f) {
   struct stat info;
-  off_t total = 0;
-  off_t original = ftello(f);
+  fuzzy_off_t total = 0;
+  fuzzy_off_t original = ftello(f);
   int fd = fileno(f);
   uint32_t blocksize = 0;
   uint64_t blockcount = 0;
@@ -120,12 +120,12 @@ off_t find_file_size(FILE *f) {
 // This is code for general UNIX systems 
 // (e.g. NetBSD, FreeBSD, OpenBSD, etc) 
 
-static off_t
-midpoint (off_t a, off_t b, long blksize)
+static fuzzy_off_t
+midpoint (fuzzy_off_t a, fuzzy_off_t b, long blksize)
 {
-  off_t aprime = a / blksize;
-  off_t bprime = b / blksize;
-  off_t c, cprime;
+  fuzzy_off_t aprime = a / blksize;
+  fuzzy_off_t bprime = b / blksize;
+  fuzzy_off_t c, cprime;
 
   cprime = (bprime - aprime) / 2 + aprime;
   c = cprime * blksize;
@@ -135,10 +135,10 @@ midpoint (off_t a, off_t b, long blksize)
 
 
 
-off_t find_dev_size(int fd, int blk_size)
+fuzzy_off_t find_dev_size(int fd, int blk_size)
 {
 
-  off_t curr = 0, amount = 0;
+  fuzzy_off_t curr = 0, amount = 0;
   void *buf;
   
   if (blk_size == 0)
@@ -183,7 +183,7 @@ off_t find_dev_size(int fd, int blk_size)
 }
 
 
-off_t find_file_size(FILE *f) 
+fuzzy_off_t find_file_size(FILE *f) 
 {
   int fd = fileno(f);
   struct stat sb;
@@ -203,9 +203,9 @@ off_t find_file_size(FILE *f)
 #endif // ifndef _WIN32
 
 #if defined(_WIN32)
-off_t find_file_size(FILE *f) 
+fuzzy_off_t find_file_size(FILE *f) 
 {
-  off_t total = 0, original = ftello(f);
+  fuzzy_off_t total = 0, original = ftello(f);
   
   // Windows does not support running fstat on block devices,
   // so there's no point in mucking about with them. 

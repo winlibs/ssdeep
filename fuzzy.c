@@ -528,7 +528,7 @@ off_t ftello(FILE *);
 
 int fuzzy_hash_file(FILE *handle, /*@out@*/ char *result)
 {
-  off_t fpos, fposend;
+  fuzzy_off_t fpos, fposend;
   int status = -1;
   struct fuzzy_state *ctx;
   fpos = ftello(handle);
@@ -583,6 +583,9 @@ static int has_common_substring(const char *s1, const char *s2)
   int i, j;
   int num_hashes;
   uint32_t hashes[SPAMSUM_LENGTH];
+  // first compute the windowed rolling hash at each offset in
+  // the first string
+  struct roll_state state;
 
   // there are many possible algorithms for common substring
   // detection. In this case I am re-using the rolling hash code
@@ -590,9 +593,6 @@ static int has_common_substring(const char *s1, const char *s2)
 
   memset(hashes, 0, sizeof(hashes));
 
-  // first compute the windowed rolling hash at each offset in
-  // the first string
-  struct roll_state state;
   roll_init (&state);
 
   for (i=0;s1[i];i++)
@@ -611,8 +611,9 @@ static int has_common_substring(const char *s1, const char *s2)
   // a direct string comparison */
   for (i=0;s2[i];i++)
   {
+    uint32_t h;
     roll_hash(&state, (unsigned char)s2[i]);
-    uint32_t h = roll_sum(&state);
+    h = roll_sum(&state);
     if (i < ROLLING_WINDOW-1) continue;
     for (j=ROLLING_WINDOW-1;j<num_hashes;j++)
     {
