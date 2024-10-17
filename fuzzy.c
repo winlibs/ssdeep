@@ -559,7 +559,7 @@ off_t ftello(FILE *);
 
 int fuzzy_hash_file(FILE *handle, /*@out@*/ char *result)
 {
-  off_t fpos, fposend;
+  fuzzy_off_t fpos, fposend;
   int status = -1;
   struct fuzzy_state *ctx;
   fpos = ftello(handle);

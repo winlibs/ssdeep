@@ -1,0 +1,26 @@
+
+CC=cl.exe
+AR=lib.exe
+
+SRC=fuzzy.c edit_dist.c find-file-size.c
+
+CFLAGS =  /nologo /Isrc /Isrc\blake2 /Iinclude /W3 /D _WINDOWS /D WIN32
+
+!if "$(DEBUG)" == "1"
+CFLAGS = $(CFLAGS) /D _DEBUG /Od /Z7 /RTC1 /MDd
+OUT_LIB_NAME = fuzzy_a_debug.lib
+!else
+CFLAGS = $(CFLAGS) /D NDebug /D NDEBUG /MP /MD /Ox /GF /Zi
+#/guard:cf /Zc:inline /Gw
+OUT_LIB_NAME = fuzzy_a.lib
+!endif
+
+all: fuzzy_a
+
+fuzzy_a:
+	$(CC) $(CFLAGS) /Fdfuzzy_a.pdb /c fuzzy.c edit_dist.c "find-file-size.c"
+	$(AR) /OUT:$(OUT_LIB_NAME) fuzzy.obj edit_dist.obj "find-file-size.obj"
+
+clean:
+	del *.obj *.lib
+
